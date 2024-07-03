@@ -1,0 +1,72 @@
+<!doctype html>
+
+{% load static %} <!-- para infromar a django que usaremos los archivos estaticos-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ENC</title>
+    <link rel='stylesheet' href="{% static 'C:\ENC\APP\static\css\bootstrap.min.css'%}">
+  </head>
+  <body>
+    <header>
+      <!--Barra de navegacion-->
+      <nav class="navbar navbar-expand-lg" style="background-color: #005e90;">
+          <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+              <!-- <img src="{%static 'C:\ENC\APP\static\imagenes\ENC.PNG' %}" alt="Logo" width="25" height="30" margin-left = "0" > -->
+              <span class="navbar-brand mb-0 h1" style="color: #fffff0;">Empresa Nacional de Combustibles</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav" >
+              <ul class="navbar-nav position-absolute end-0 mx-3" >
+                  <li class="nav-item">
+                      <a style="color: #fffff0;"  class="nav-link active" aria-current="page" href="#">Inicio</a> <!--AGREGAR HACIA DONDE SE DEBE DIRIGIR EN HREF-->
+                  </li>
+                  <li class="nav-item">
+                      <a style="color: #fffff0;" class="nav-link" href="#">Plantas</a><!--AGREGAR HACIA DONDE SE DEBE DIRIGIR EN HREF-->
+                  </li>
+                  <li>
+                    <a style="color: #fffff0;" class="nav-link" href="#">Ingresar</a>
+                  </li>
+                 
+               <!-- LOGICA DE INICIO DE SESION-->   
+              </ul>
+          </div>
+          </div>
+      </nav>
+  </header>
+
+
+
+
+
+
+
+
+
+   <!-- <nav>
+      
+      <ul class="nav justify-content-center" style="background-color: #084d6e;">
+        Empresa Nacional de Combustibles
+        <li>
+          <a style="color: #fffff0;" class="nav-link " aria-current="page" href="#">Inicio</a>
+        </li>
+        <li>
+          <a style="color: #fffff0;" class="nav-link" href="#">Proyectos</a>
+        </li>
+        <li>
+          <a style="color: #fffff0;" class="nav-link" href="#">Ingresar</a>
+        </li>
+      </ul>
+    </nav>
+    
+-->
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="{% static 'C:\ENC\APP\static\js\bootstrap.min.js'%}"></script>
+  </body>
+</html>
