@@ -4,6 +4,9 @@ from django.db import models
 
 class Operador (models.Model):  #modelo solo con los nombres de los operadores
         nombre = models.CharField(max_length = 100)
+        #funcion para que en las tablas de la BBDD se vean los nombres y no como object
+        def str(self) -> str:
+                return self.nombre
 
 
 class Plantas (models.Model):    #modelo de plantas con sus nombres y contraccion
