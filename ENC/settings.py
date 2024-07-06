@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    
-    'APP', #my app
+    'core', #my app
+
     'rest_framework', #para de rest framework
+    'rest',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'C:\ENC\APP\static'),  #ingresar ubicación (path) de los static, sino arroja error 
+    os.path.join(BASE_DIR, 'core/static'),  #ingresar ubicación (path) de los static, sino arroja error 
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -1,0 +1,8 @@
+<!-- registro_produccion.html -->
+
+<form method="POST" action="{% url 'registrar_produccion' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Guardar</button>
+</form>
