@@ -14,5 +14,5 @@ router.register(r'resgistros', Registro_ProduccionViewSet)
 
 urlpatterns = [
     path ("", APPView, name='APP'),
-    path ("", include(router.urls)),
+    path ("api/", include(router.urls)),
 ]

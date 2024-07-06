@@ -2,11 +2,16 @@ import requests # biblioteca de python que simplifica la realización métodos y
 from datetime import datetime
 from .models import Plantas,  Registro_Produccion 
 
-def mensaje_slack (registro):
+def enviar_mensaje_slack(registro):
     url = 'https://slack.com/api/chat.postMessage'
-    headrs = {
-        'Content-Type' : 'application/json',
-        'Authorization' : 'Bearer YOUR_SLACK_BOT_TOKEN'
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer xoxb-7384383188946-7384399429666-1pAe2rvuCqILq7acsgxHmaie'
     }
-
-mensaje = f"{datetime.now()} {Plantas.codigo} - Nuevo Registro de Produccion - { Registro_Produccion.codigo_combustible} {Registro_Produccion.litros_produccion }"
+    mensaje = f"{datetime.now()} {registro.producto.planta.codigo} – Nuevo Registro de Producción – {registro.producto.codigo} {registro.litros_producidos} litros registrados | Total Almacenado: CALCULA_TOTAL_ALMACENADO"
+    data = {
+        'channel': '#ProductTracker',
+        'text': mensaje
+    }
+    response = requests.post(url, headers=headers, json=data)
+    return response
