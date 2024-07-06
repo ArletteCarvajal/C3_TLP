@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Operador, Plantas, Productos, Registro_Produccion
+from core.models import Operador, Plantas, Productos, Registro_Produccion
 
 class OperadorSerializer (serializers.ModelSerializer):
     class Meta:

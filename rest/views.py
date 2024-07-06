@@ -1,11 +1,12 @@
+# rest/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Operador, Plantas, Productos, Registro_Produccion
+from core.models import Operador, Plantas, Productos, Registro_Produccion
 from .serializers import OperadorSerializer, PlantasSerializer, ProductosSerializer, Registro_ProduccionsSerializer
 from rest_framework import viewsets, status
-from .utils import enviar_mensaje_slack  # Importar la función de utilidades
-from .forms import RegistroProduccionForm
+from .utils import enviar_mensaje_slack
+from core.forms import RegistroProduccionForm
 
 def APPView(request):
     return render(request, 'core/inicio.html')
@@ -35,9 +36,7 @@ class Registro_ProduccionViewSet(viewsets.ModelViewSet):
             enviar_mensaje_slack(registro)
         return response
 
-
-
-#@login_required
+# @login_required
 def registrar_produccion(request):
     if request.method == 'POST':
         form = RegistroProduccionForm(request.POST)
@@ -45,14 +44,13 @@ def registrar_produccion(request):
             registro = form.save(commit=False)
             registro.operador = request.user
             registro.save()
-            enviar_mensaje_slack(registro)  # Enviar notificación por Slack
-            return redirect('success_page')  # Redirigir a página de éxito
+            enviar_mensaje_slack(registro)
+            return redirect('success_page')
     else:
         form = RegistroProduccionForm()
-    
     return render(request, 'core/registrar_produccion.html', {'form': form})
 
-#@login_required
+# @login_required
 def modificar_produccion(request, id):
     registro = Registro_Produccion.objects.get(id=id, operador=request.user)
     if request.method == 'POST':
@@ -64,8 +62,7 @@ def modificar_produccion(request, id):
         form = RegistroProduccionForm(instance=registro)
     return render(request, 'APP/modificar_produccion.html', {'form': form})
 
-
-#@login_required
+# @login_required
 def consultar_produccion(request):
     registros = Registro_Produccion.objects.filter(operador=request.user)
     return render(request, 'APP/consultar_produccion.html', {'registros': registros})
