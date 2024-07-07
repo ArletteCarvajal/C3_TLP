@@ -56,10 +56,10 @@ def registrar_produccion(request):
         form = RegistroProduccionForm(request.POST)
         if form.is_valid():
             registro = form.save(commit=False)
-            registro.operador = request.user
+            operador = Operador.objects.get(user=request.user)
+            registro.operador = operador
             registro.save()
-            enviar_mensaje_slack(registro)
-            return redirect('success_page')
+            return redirect('inicio')  # Redirige a la vista deseada después de guardar
     else:
         form = RegistroProduccionForm()
     return render(request, 'core/registrar_produccion.html', {'form': form})

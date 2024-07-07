@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django.contrib import admin
-from .models import Operador, Plantas, Productos, Registro_Produccion, Supervisor
 from django.apps import AppConfig
 from django.contrib.auth.models import Group
+from .models import Operador, Plantas, Productos, Registro_Produccion, Supervisor, AnulacionHistorial
 
 # Register your models here.
 
@@ -15,12 +14,10 @@ class CoreConfig(AppConfig):
         Group.objects.get_or_create(name='operador')
 
 
-#clase para que en las tablas de la BBDD se vean los nombres, codigo y planta  y no como object
 class PlantasAdmin(admin.ModelAdmin):
     list_display = ('nombre_planta', 'codigo_planta')
 
 
-#clase para que en las tablas de la BBDD se vean los nombres, codigo y planta  y no como object
 class ProductosAdmin(admin.ModelAdmin):
     list_display = ('nombre_producto', 'codigo_producto', 'nombre_planta_')
 
@@ -30,23 +27,41 @@ class ProductosAdmin(admin.ModelAdmin):
     nombre_planta_.short_description = 'Planta'
 
 
-#clase para que en las tablas de la BBDD se vean los nombres, codigo y planta  y no como object
 class RegistroAdmin(admin.ModelAdmin):
-    list_display = ('combustible', 'litros_produccion', 'fecha_produccion', 'turno', 'hora_registro', 'operador_nom')
-    
-    def combustible (self, obj):
+    list_display = ('combustible', 'litros_produccion', 'fecha_produccion', 'turno', 'hora_registro', 'operador_nom', 'anulado')
+    list_filter = ('anulado',)
+    search_fields = ('codigo_combustible__codigo_producto', 'operador__user__username')
+    actions = ['marcar_anulado', 'desmarcar_anulado']
+
+    def combustible(self, obj):
         return obj.codigo_combustible.codigo_producto
 
     combustible.short_description = 'Combustible'
 
     def operador_nom(self, obj):
-        return obj.operador.nombre_operador
+        return obj.operador.user.username
 
     operador_nom.short_description = 'Operador'
 
+    def marcar_anulado(self, request, queryset):
+        updated = queryset.update(anulado=True)
+        self.message_user(request, f'Se marcaron como anulados {updated} registros.')
 
-admin.site.register(Supervisor) #para crear la tabla
-admin.site.register(Operador) #para crear la tabla
-admin.site.register(Plantas, PlantasAdmin) #para crear la tabla
-admin.site.register(Productos, ProductosAdmin) #para crear la tabla
-admin.site.register(Registro_Produccion, RegistroAdmin) #para crear la tabla
+    def desmarcar_anulado(self, request, queryset):
+        updated = queryset.update(anulado=False)
+        self.message_user(request, f'Se desmarcaron como anulados {updated} registros.')
+
+    marcar_anulado.short_description = 'Marcar como anulado'
+    desmarcar_anulado.short_description = 'Desmarcar como anulado'
+
+
+class AnulacionHistorialAdmin(admin.ModelAdmin):
+    list_display = ('produccion', 'fecha_anulacion', 'anulado_por')
+    search_fields = ('produccion__codigo_combustible__codigo_producto', 'anulado_por')
+
+admin.site.register(Supervisor) # Para crear la tabla
+admin.site.register(Operador) # Para crear la tabla
+admin.site.register(Plantas, PlantasAdmin) # Para crear la tabla
+admin.site.register(Productos, ProductosAdmin) # Para crear la tabla
+admin.site.register(Registro_Produccion, RegistroAdmin) # Para crear la tabla
+admin.site.register(AnulacionHistorial, AnulacionHistorialAdmin) # Para crear la tabla
