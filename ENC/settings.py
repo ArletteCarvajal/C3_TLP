@@ -134,9 +134,3 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'core/static'),  #ingresar ubicación (path) de los static, sino arroja error 
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# variables de entorno para entrar y salir 
-
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL =  'salir'
