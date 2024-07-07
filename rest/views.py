@@ -9,6 +9,8 @@ from .serializers import OperadorSerializer, PlantasSerializer, ProductosSeriali
 from rest_framework import viewsets, status
 from .utils import enviar_mensaje_slack
 from core.forms import RegistroProduccionForm, SupervisorForm, OperadorForm
+from django.contrib import messages
+
 
 def APPView(request):
     return render(request, 'core/inicio.html')
@@ -86,46 +88,48 @@ def consultar_produccion(request):
 
 #registro_usuario
 
-def registro_supervisor(request):
-    if request.method == 'POST':
-        form = SupervisorForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            supervisor = Supervisor.objects.create(user=user)
-            supervisor.save()
-            # Asignar el usuario al grupo 'supervisor'
-            group = Group.objects.get(name='supervisor')
-            user.groups.add(group)
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('home')  # Reemplaza 'home' con tu URL de página principal
-    else:
-        form = SupervisorForm()
-    
-    return render(request, 'core/registro_supervisor.html', {'form': form})
-
 def registro_operador(request):
     if request.method == 'POST':
         form = OperadorForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            operador = Operador.objects.create(user=user)
-            operador.save()
-            # Asignar el usuario al grupo 'operador'
-            group = Group.objects.get(name='operador')
+            user = form.save()
+            # Asignar el grupo 'operador' al usuario
+            group, created = Group.objects.get_or_create(name='operador')
             user.groups.add(group)
+            # Crear el perfil de Operador
+            Operador.objects.create(user=user)
+            # Autenticar y loguear al usuario
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Reemplaza 'home' con tu URL de página principal
+                return redirect('inicio')  # Reemplaza 'home' con tu URL de página principal
     else:
         form = OperadorForm()
     
     return render(request, 'core/registro_operador.html', {'form': form})
+
+
+
+def registro_supervisor(request):
+    if request.method == 'POST':
+        form = SupervisorForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Asignar el grupo 'supervisor' al usuario
+            group, created = Group.objects.get_or_create(name='supervisor')
+            user.groups.add(group)
+            # Crear el perfil de Supervisor
+            Supervisor.objects.create(user=user)
+            # Autenticar y loguear al usuario
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('inicio')  # Reemplaza 'home' con tu URL de página principal
+    else:
+        form = SupervisorForm()
+    
+    return render(request, 'core/registro_supervisor.html', {'form': form})

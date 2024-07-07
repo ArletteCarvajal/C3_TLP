@@ -26,7 +26,7 @@ urlpatterns = [
     path('registro/supervisor/', views.registro_supervisor, name='registro_supervisor'),
     path('registro/operador/', views.registro_operador, name='registro_operador'),
     
-    #path('core/', include('core.urls')),
+    path('core/', include('core.urls')),
 
     path('rest/', include('rest.urls')),
 

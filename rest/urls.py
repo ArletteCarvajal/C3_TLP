@@ -10,7 +10,7 @@ router.register(r'productos', ProductosViewSet)
 router.register(r'registros', Registro_ProduccionViewSet)
 
 urlpatterns = [
-    #path("", APPView, name='APP'),
+    path("", APPView, name='inicio'),
     path("", include(router.urls)),
     path("registrar-produccion/", registrar_produccion, name='registrar_produccion'),
     path("modificar-produccion/<int:id>/", modificar_produccion, name='modificar_produccion'),
