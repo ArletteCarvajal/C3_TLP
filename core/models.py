@@ -1,8 +1,10 @@
 from django.db import models
+#from django.contrib.auth.models import User ##cambip
 
 # Create your models here.
 
 class Operador (models.Model):  #modelo solo con los nombres de los operadores
+        #user = models.OneToOneField(User, on_delete=models.CASCADE) ##cambio
         nombre_operador = models.CharField(max_length = 100)
 
         #funcion para que en las tablas de la BBDD se vean los nombres y no como object
@@ -18,7 +20,7 @@ class Productos (models.Model): #modelo de productos, contraccion o codigo y la 
         codigo_producto = models.CharField(max_length = 3, primary_key = True)
         nombre_planta = models.ForeignKey(Plantas, on_delete = models.CASCADE)
 
-        def _str_(self):
+        def __str__(self):
                 return f'{self.nombre_producto} - {self.codigo_producto} - {self.nombre_planta.nombre_planta}'
 
 class Registro_Produccion (models.Model):
@@ -29,5 +31,5 @@ class Registro_Produccion (models.Model):
         hora_registro = models.TimeField()
         operador = models.ForeignKey(Operador, on_delete = models.CASCADE)
 
-        def _str_(self):
+        def __str__(self):
                 return f'{self.codigo_combustible.codigo_producto} - {self.litros_produccion} - {self.fecha_produccion} - {self.turno} - {self.hora_registro} - {self.operador.nombre_operador}'

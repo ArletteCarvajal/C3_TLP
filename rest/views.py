@@ -1,5 +1,6 @@
 # rest/views.py
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from core.models import Operador, Plantas, Productos, Registro_Produccion
