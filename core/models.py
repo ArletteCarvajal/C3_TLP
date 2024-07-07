@@ -19,13 +19,12 @@ class Operador(models.Model):
     def __str__(self):
         return self.user.username
 
-
-
-
-
 class Plantas (models.Model):    #modelo de plantas con sus nombres y contraccion
         nombre_planta = models.CharField(max_length = 100)
         codigo_planta = models.CharField(max_length = 100)
+
+        def __str__(self):
+              return f'{self.nombre_planta} - {self.codigo_planta}'
 
 class Productos (models.Model): #modelo de productos, contraccion o codigo y la planta de donde proviene
         nombre_producto = models.CharField(max_length = 100)

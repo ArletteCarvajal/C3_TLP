@@ -9,13 +9,7 @@ class RegistroProduccionForm(forms.ModelForm):
         model = Registro_Produccion
         fields = ['codigo_combustible', 'litros_produccion', 'fecha_produccion', 'turno', 'hora_registro', 'operador']
 
-
-
-
 #formulario registro
-
-
-
     
 class SupervisorForm(UserCreationForm):
     class Meta:
