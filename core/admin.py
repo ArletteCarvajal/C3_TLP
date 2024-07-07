@@ -1,8 +1,19 @@
 from django.contrib import admin
 from django.contrib import admin
-from .models import Operador, Plantas, Productos, Registro_Produccion
+from .models import Operador, Plantas, Productos, Registro_Produccion, Supervisor
+from django.apps import AppConfig
+from django.contrib.auth.models import Group
 
 # Register your models here.
+
+class CoreConfig(AppConfig):
+    name = 'core'
+
+    def ready(self):
+        # Crear grupos si no existen
+        Group.objects.get_or_create(name='supervisor')
+        Group.objects.get_or_create(name='operador')
+
 
 #clase para que en las tablas de la BBDD se vean los nombres, codigo y planta  y no como object
 class PlantasAdmin(admin.ModelAdmin):
@@ -34,7 +45,7 @@ class RegistroAdmin(admin.ModelAdmin):
     operador_nom.short_description = 'Operador'
 
 
-
+admin.site.register(Supervisor) #para crear la tabla
 admin.site.register(Operador) #para crear la tabla
 admin.site.register(Plantas, PlantasAdmin) #para crear la tabla
 admin.site.register(Productos, ProductosAdmin) #para crear la tabla

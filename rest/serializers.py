@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from core.models import Operador, Plantas, Productos, Registro_Produccion
+from core.models import Operador, Plantas, Productos, Registro_Produccion, Supervisor
+
+
+
+class SupervisorSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Supervisor
+        fields = '__all__'
 
 class OperadorSerializer (serializers.ModelSerializer):
     class Meta:

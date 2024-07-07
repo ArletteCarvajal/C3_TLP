@@ -1,15 +1,27 @@
 from django.db import models
-#from django.contrib.auth.models import User ##cambip
+from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 
-class Operador (models.Model):  #modelo solo con los nombres de los operadores
-        #user = models.OneToOneField(User, on_delete=models.CASCADE) ##cambio
-        nombre_operador = models.CharField(max_length = 100)
 
-        #funcion para que en las tablas de la BBDD se vean los nombres y no como object
-        def __str__(self):
-                return self.nombre_operador
+class Supervisor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
+class Operador(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
+
+
 
 class Plantas (models.Model):    #modelo de plantas con sus nombres y contraccion
         nombre_planta = models.CharField(max_length = 100)
