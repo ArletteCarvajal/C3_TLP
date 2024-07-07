@@ -1,6 +1,7 @@
 # rest/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -133,3 +134,20 @@ def registro_supervisor(request):
         form = SupervisorForm()
     
     return render(request, 'core/registro_supervisor.html', {'form': form})
+
+
+
+
+
+#login
+
+
+def user_login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return redirect('inicio')  # Asegúrate de que 'inicio' es el nombre correcto de la ruta para tu página principal
+    else:
+        form = AuthenticationForm()
+    return render(request, 'core/login.html', {'form': form})

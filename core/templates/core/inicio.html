@@ -37,6 +37,16 @@
           </div>
           </div>
       </nav>
+      {% if user.is_authenticated %}
+        <p>Bienvenido, {{ user.username }}</p>
+        <p>Grupo(s): 
+          {% for group in user.groups.all %}
+              {{ group.name }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+      {% else %}
+        <p>No estás autenticado. <a href="{% url 'login' %}">Inicia sesión</a></p>
+      {% endif %}
   </header>
 
 
