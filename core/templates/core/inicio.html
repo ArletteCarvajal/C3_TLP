@@ -1,56 +1,77 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ENC</title>
-    <!--funciones de diseño -->
-    <link rel="stylesheet" href= "{%static 'C:\C3_TLP\core\static\core\css\bootstrap.min.css' %}">
-    <!--funciones de js-->
-    <script src="{%static 'C:\C3_TLP\core\static\core\js\bootstrap.min.js' %}"></script>
-    <link rel="StyleSheet" href="{%static 'estilos.css' %}" type="text/css">
-  </head>
-  <body>
+    <!-- Funciones de diseño -->
+    <link rel="stylesheet" href="{% static 'core/css/bootstrap.min.css' %}">
+    <!-- Funciones de JS -->
+    <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="StyleSheet" href="{% static 'estilos.css' %}" type="text/css">
+</head>
+<body>
 
-    <center>
-      <!-- Header Section -->
-      <nav class="navbar navbar-expand-lg" style="background-color: brown;">
+<center>
+    <!-- Header Section -->
+    <nav class="navbar navbar-expand-lg" style="background-color: brown;">
         <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <span class="navbar-brand mb-0 h1">Empresa Nacional de Combustibles</span>
-        </a>
+            <a class="navbar-brand" href="{% url 'inicio' %}">
+                <span class="navbar-brand mb-0 h1">Empresa Nacional de Combustibles</span>
+            </a>
         </div>
-      </nav>
+    </nav>
 
-      {% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated %}
         <h4>Bienvenido, {{ request.user.username }}!</h4>
         <a href="{% url 'salir' %}">Cerrar sesión</a>
-
-      {% endif %}
-      
-      <br>
-      <br>
-      <br>
-      <!-- Boton registro de producciones -->
-      {% block content %}
-        <a href="{% url 'registrar_p' %}" name="opcion" value="registrar" class="btn btn-primary">Ingresar Producción</a>
-
-
-      <!-- Boton modificacion de producciones -->
-        <a href = "{% url 'modificar' %}" name="opcion" value="modificar"  class="btn btn-primary">Modificar Producción</a>
-
-
-      <!-- Boton consultas de producciones -->
-          <a href="{% url 'consultar' %}" name="opcion" value="consultar"class="btn btn-primary">Consultar Producciones</a>
-          
-
-       <!-- Boton supervisor -->
-          <a href="{% url 'admin:index' %}" class="btn btn-primary">Supervisor</a>
-      {% endblock %}
+    {% endif %}
     
+    <br>
+    <br>
+    <br>
+    <!-- Botones de opciones -->
+    {% block content %}
+
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Nuevo Registro</h5>
+            <p class="card-text">Creación de registro de la producción diaria</p>
+            <a href="{% url 'registrar_produccion' %}" class="btn btn-primary">Crear</a>
+        </div>
+    </div>
+
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Modificar Registro</h5>
+            <p class="card-text">Modificación de registros de la producción diaria</p>
+            {% for registro in registros %}
+                <p>{{ registro.pk }} - {{ registro }}</p>
+                <a href="{% url 'modificar_produccion' pk=registro.pk %}" class="btn btn-primary">Modificar</a>
+            {% endfor %}
+        </div>
+    </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-  </body>
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Mis Registros</h5>
+            <p class="card-text">Registros ingresados por el operador</p>
+            <a href="{% url 'registros_del_usuario' %}" class="btn btn-primary">Consultar</a>
+        </div>
+    </div>
+
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Supervisor</h5>
+            <a href="{% url 'admin:index' %}" class="btn btn-primary">Ingresar</a>
+        </div>
+    </div>
+
+    {% endblock %}
+</center>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+</body>
 </html>

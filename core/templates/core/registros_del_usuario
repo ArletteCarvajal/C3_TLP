@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registros del Usuario</title>
+</head>
+<body>
+    <h1>Registros del Usuario {{ request.user.username }}</h1>
+    
+    <ul>
+        {% for registro in registros %}
+            <li>{{ registro.fecha }} - {{ registro.descripcion }}</li>
+        {% empty %}
+            <li>No hay registros disponibles.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+
+

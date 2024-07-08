@@ -9,7 +9,7 @@ from core.models import Operador, Plantas, Productos, Registro_Produccion, Super
 from .serializers import OperadorSerializer, PlantasSerializer, ProductosSerializer, Registro_ProduccionsSerializer, SupervisorSerializer
 from rest_framework import viewsets, status
 from .utils import enviar_mensaje_slack
-from core.forms import RegistroProduccionForm, SupervisorForm, OperadorForm
+from core.forms import RegistroProduccionForm, OperadorForm
 from django.contrib import messages
 from django.utils import timezone
 
@@ -44,7 +44,7 @@ class Registro_ProduccionViewSet(viewsets.ModelViewSet):
             enviar_mensaje_slack(registro)
         return response
 
-@login_required
+"""@login_required
 def registrar_produccion(request):
     if request.method == 'POST':
         form = RegistroProduccionForm(request.POST)
@@ -58,16 +58,16 @@ def registrar_produccion(request):
             return redirect('inicio')
     else:
         form = RegistroProduccionForm()
-    return render(request, 'core/registrar_produccion.html', {'form': form})
+    return render(request, 'core/registrar_produccion.html', {'form': form})"""
 
 
-@login_required
+"""@login_required
 def ver_registros(request):
     registros = Registro_Produccion.objects.all()
-    return render(request, 'inicio.html', {'registros': registros})
+    return render(request, 'inicio.html', {'registros': registros})"""
 
 
-@login_required
+"""@login_required
 def editar_registro(request, pk):
     registro = get_object_or_404(Registro_Produccion, pk=pk)
     if registro.operador.user != request.user:
@@ -99,9 +99,7 @@ def editar_registro(request, pk):
     return render(request, 'editar_registro.html', {'form': form})
 
 
-
-
-def registro_operador(request):
+""""""def registro_operador(request):
     if request.method == 'POST':
         form = OperadorForm(request.POST)
         if form.is_valid():
@@ -121,9 +119,20 @@ def registro_operador(request):
     else:
         form = OperadorForm()
     
-    return render(request, 'core/registro_operador.html', {'form': form})
+    return render(request, 'core/registro_operador.html', {'form': form})"""
 
-def registro_supervisor(request):
+"""def user_login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return redirect('inicio')  # Asegúrate de que 'inicio' es el nombre correcto de la ruta para tu página principal
+    else:
+        form = AuthenticationForm()
+    return render(request, 'core/login.html', {'form': form})"""
+
+
+"""def registro_supervisor(request):
     if request.method == 'POST':
         form = SupervisorForm(request.POST)
         if form.is_valid():
@@ -143,16 +152,4 @@ def registro_supervisor(request):
     else:
         form = SupervisorForm()
     
-    return render(request, 'core/registro_supervisor.html', {'form': form})
-
-def user_login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            login(request, form.get_user())
-            return redirect('inicio')  # Asegúrate de que 'inicio' es el nombre correcto de la ruta para tu página principal
-    else:
-        form = AuthenticationForm()
-    return render(request, 'core/login.html', {'form': form})
-
-
+    return render(request, 'core/registro_supervisor.html', {'form': form})"""

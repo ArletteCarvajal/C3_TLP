@@ -7,8 +7,12 @@ from django.contrib.auth.models import User, Group
 class RegistroProduccionForm(forms.ModelForm):
     class Meta:
         model = Registro_Produccion
-        fields = ['codigo_combustible', 'litros_produccion', 'turno']
+        fields = ['codigo_combustible', 'litros_produccion', 'turno']  
 
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data
+    
 
 #formulario registro
     

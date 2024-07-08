@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Supervisor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -40,7 +41,7 @@ class Registro_Produccion(models.Model):
     fecha_produccion = models.DateField(auto_now_add=True)
     turno = models.CharField(max_length=2, choices=TURNO_CHOICES)
     hora_registro = models.TimeField(auto_now_add=True)
-    operador = models.ForeignKey(Operador, on_delete=models.CASCADE)
+    operador = models.ForeignKey(User, on_delete=models.CASCADE)
     anulado = models.BooleanField(default=False)
     modificado_por = models.ForeignKey(User, related_name='modificados', null=True, blank=True, on_delete=models.SET_NULL)
     modificado_en = models.DateTimeField(null=True, blank=True)
@@ -61,8 +62,13 @@ class AnulacionHistorial(models.Model):
 class RegistroModificacion(models.Model):
     registro = models.ForeignKey(Registro_Produccion, on_delete=models.CASCADE)
     modificado_por = models.ForeignKey(User, on_delete=models.CASCADE)
-    fecha_modificacion = models.DateTimeField(auto_now_add=True)
     datos_antes = models.TextField()
+    fecha_modificacion = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f'Modificación de {self.modificado_por} en {self.fecha_modificacion}'
+        return f"Modificación de {self.registro} por {self.modificado_por} el {self.fecha_modificacion}"
+    
+
+    
+
+

@@ -65,7 +65,7 @@ ROOT_URLCONF = 'ENC.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'core', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,6 +77,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'ENC.wsgi.application'
 
@@ -140,13 +142,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'inicio'
 LOGOUT_REDIRECT_URL = 'salir'
 
-<<<<<<< HEAD
 # variables de entorno para entrar y salir 
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'login'
 LOGOUT_REDIRECT_URL =  'salir'
-=======
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'inicio'
-LOGOUT_REDIRECT_URL = 'login'
->>>>>>> 2e640a6f0e390f2d0b525434a0c965f42d55c5a0

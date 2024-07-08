@@ -1,9 +1,19 @@
+{% extends 'core/inicio.html' %}
 
-{% block content %}
-  <h2>Editar Registro</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-  </form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Registro de Producción</title>
+</head>
+<body>
+    {% block content %}
+    <h2>Editar Registro de Producción</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+    </form>
 {% endblock %}
+</body>
+</html>
+
