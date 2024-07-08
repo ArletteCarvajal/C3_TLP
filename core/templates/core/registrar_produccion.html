@@ -1,8 +1,18 @@
 <!-- registro_produccion.html -->
+{% extends 'core/inicio.html' %}
 
-<form method="POST" action="{% url 'registrar_produccion' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
+{% block content %}
 
-    <button type="submit">Guardar</button>
-</form>
+    {% if request.user.is_authenticated %}
+    <br>
+    <h3> Ingresa la producción {{ user.username }}</h3>
+
+    <form method="POST" action="{% url 'registrar_produccion' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+
+    {% endif %} 
+
+{% endblock %}
