@@ -1,42 +1,37 @@
 # rest/views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from core.models import Operador, Plantas, Productos, Registro_Produccion, Supervisor
+from core.models import Operador, Plantas, Productos, Registro_Produccion, Supervisor, RegistroModificacion
 from .serializers import OperadorSerializer, PlantasSerializer, ProductosSerializer, Registro_ProduccionsSerializer, SupervisorSerializer
 from rest_framework import viewsets, status
 from .utils import enviar_mensaje_slack
 from core.forms import RegistroProduccionForm, SupervisorForm, OperadorForm
 from django.contrib import messages
+from django.utils import timezone
 
 
 def APPView(request):
     return render(request, 'core/inicio.html')
 
-# CREACION DE CLASES PARA CRUD (Crear, Leer, Actualizar y Borrar) 
-
 class SupervisorViewSet(viewsets.ModelViewSet):
     queryset = Supervisor.objects.all()
     serializer_class = SupervisorSerializer
-
 
 class OperadorViewSet(viewsets.ModelViewSet):
     queryset = Operador.objects.all()
     serializer_class = OperadorSerializer
 
-
 class PlantasViewSet(viewsets.ModelViewSet):
     queryset = Plantas.objects.all()
     serializer_class = PlantasSerializer
 
-
 class ProductosViewSet(viewsets.ModelViewSet):
     queryset = Productos.objects.all()
     serializer_class = ProductosSerializer
-
 
 class Registro_ProduccionViewSet(viewsets.ModelViewSet):
     queryset = Registro_Produccion.objects.all()
@@ -49,45 +44,62 @@ class Registro_ProduccionViewSet(viewsets.ModelViewSet):
             enviar_mensaje_slack(registro)
         return response
 
-
-# @login_required
+@login_required
 def registrar_produccion(request):
     if request.method == 'POST':
         form = RegistroProduccionForm(request.POST)
         if form.is_valid():
             registro = form.save(commit=False)
-            registro.operador = request.user
+            operador = Operador.objects.get(user=request.user)
+            registro.operador = operador
+            registro.turno = form.cleaned_data['turno']
             registro.save()
             enviar_mensaje_slack(registro)
-            return redirect('success_page')
+            return redirect('inicio')
     else:
         form = RegistroProduccionForm()
     return render(request, 'core/registrar_produccion.html', {'form': form})
 
-# @login_required
-def modificar_produccion(request, id):
-    registro = Registro_Produccion.objects.get(id=id, operador=request.user)
+
+@login_required
+def ver_registros(request):
+    registros = Registro_Produccion.objects.all()
+    return render(request, 'inicio.html', {'registros': registros})
+
+
+@login_required
+def editar_registro(request, pk):
+    registro = get_object_or_404(Registro_Produccion, pk=pk)
+    if registro.operador.user != request.user:
+        messages.error(request, "No tienes permiso para editar este registro.")
+        return redirect('inicio')
+    
     if request.method == 'POST':
         form = RegistroProduccionForm(request.POST, instance=registro)
         if form.is_valid():
-            form.save()
-            return redirect('success_page')
+            cambios = {}
+            for field in form.changed_data:
+                cambios[field] = getattr(registro, field)
+
+            registro = form.save(commit=False)
+            registro.modificado_por = request.user
+            registro.modificado_en = timezone.now()
+            registro.save()
+
+            RegistroModificacion.objects.create(
+                registro=registro,
+                modificado_por=request.user,
+                datos_antes=str(cambios)
+            )
+
+            messages.success(request, "Registro modificado correctamente.")
+            return redirect('ver_registros')
     else:
         form = RegistroProduccionForm(instance=registro)
-    return render(request, 'APP/modificar_produccion.html', {'form': form})
-
-# @login_required
-def consultar_produccion(request):
-    registros = Registro_Produccion.objects.filter(operador=request.user)
-    return render(request, 'APP/consultar_produccion.html', {'registros': registros})
+    return render(request, 'editar_registro.html', {'form': form})
 
 
 
-
-
-
-
-#registro_usuario
 
 def registro_operador(request):
     if request.method == 'POST':
@@ -111,8 +123,6 @@ def registro_operador(request):
     
     return render(request, 'core/registro_operador.html', {'form': form})
 
-
-
 def registro_supervisor(request):
     if request.method == 'POST':
         form = SupervisorForm(request.POST)
@@ -135,13 +145,6 @@ def registro_supervisor(request):
     
     return render(request, 'core/registro_supervisor.html', {'form': form})
 
-
-
-
-
-#login
-
-
 def user_login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
@@ -151,3 +154,5 @@ def user_login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'core/login.html', {'form': form})
+
+

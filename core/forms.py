@@ -7,7 +7,8 @@ from django.contrib.auth.models import User, Group
 class RegistroProduccionForm(forms.ModelForm):
     class Meta:
         model = Registro_Produccion
-        fields = ['codigo_combustible', 'litros_produccion', 'fecha_produccion', 'turno', 'hora_registro', 'operador']
+        fields = ['codigo_combustible', 'litros_produccion', 'turno']
+
 
 #formulario registro
     
@@ -20,3 +21,8 @@ class OperadorForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+
+
+
+
